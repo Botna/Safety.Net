@@ -24,7 +24,7 @@ namespace WatchMe.Services
             while (SENTINEL)
             {
                 WaitForNextTick();
-                //SENTINEL = false;
+                SENTINEL = false;
                 var files = await _videosRepository.GetAllVideosAsync();
                 //Spin, pull bytes of currently recording videos, and start uploading htem in ~5 second increments. 
                 foreach (var file in files)
