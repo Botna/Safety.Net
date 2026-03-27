@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Maui.Views;
-using WatchMe.Persistance.CloudProviders;
 using WatchMe.Persistance.Sqlite;
 using WatchMe.Persistance.Sqlite.Tables;
 using WatchMe.Repository;
@@ -16,7 +15,6 @@ namespace WatchMe.Services
 
     public class OrchestrationService : IOrchestrationService
     {
-        private readonly ICloudProviderService _cloudProviderService;
         private readonly IFileSystemService _fileSystemService;
         private readonly INotificationService _notificationService;
         private readonly IVideosRepository _videosRepository;
@@ -27,10 +25,9 @@ namespace WatchMe.Services
         private string _backVideoFileName;
         private CameraView _backCameraView;
 
-        public OrchestrationService(ICloudProviderService cloudProviderService, IFileSystemService fileSystemService, INotificationService notificationService, IDatabaseInitializer databaseInitializer,
+        public OrchestrationService(IFileSystemService fileSystemService, INotificationService notificationService, IDatabaseInitializer databaseInitializer,
             IVideosRepository videosRepository, IForegroundServiceDispatcher serviceDispatcher)
         {
-            _cloudProviderService = cloudProviderService;
             _fileSystemService = fileSystemService;
             _notificationService = notificationService;
             _videosRepository = videosRepository;
@@ -60,7 +57,6 @@ namespace WatchMe.Services
 
             if (MauiProgram.ISEMULATED)
             {
-
                 //clean up videos in our SQLLITE
                 var allVideos = await _videosRepository.GetAllVideosAsync();
                 await _videosRepository.DeleteVideosAsync(allVideos.ToArray());
@@ -79,7 +75,6 @@ namespace WatchMe.Services
 
         public async Task InitiateRecordingProcedure()
         {
-
             if (!MauiProgram.ISEMULATED)
             {
                 var message = "Andrew just started a WatchMe Routine. Click here to watch along: https://www.youtube.com/watch?v=dQw4w9WgXcQ";
@@ -87,10 +82,7 @@ namespace WatchMe.Services
 
             }
 
-
-
             await StartRecordingAsync(_backCameraView, _backVideoFileName);
-
         }
 
         private async Task StartRecordingAsync(CameraView camera, string filename)
@@ -138,15 +130,10 @@ namespace WatchMe.Services
                 await _fileSystemService.MoveVideoToGallery((MemoryStream)backMemStream, "Back_" + videoTimeStamp + ".mp4");
             }
 
-            ////var frontVideo = await _videosRepository.GetVideosByVideoName(_frontVideoFileName);
-            ////frontVideo.TotalBytes = (await frontVideoBytesTask).Count();
-            ////frontVideo.VideoState = VideoStates.Finished.ToString();
-
             var backVideo = await _videosRepository.GetVideosByVideoName(_backVideoFileName);
             backVideo.TotalBytes = backMemStream.Length;
             backVideo.VideoState = VideoStates.Finished.ToString();
 
-            ////await _videosRepository.UpdateTotalBytesOfVideo(frontVideo.Id, frontVideo.TotalBytes);
             await _videosRepository.UpdateTotalBytesOfVideo(backVideo.Id, backVideo.TotalBytes);
             await _videosRepository.UpdateStateOfVideo(backVideo.Id, VideoStates.Finished);
         }
