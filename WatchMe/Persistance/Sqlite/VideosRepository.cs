@@ -8,12 +8,12 @@ namespace WatchMe.Persistance.Sqlite
         public Task<List<Videos>> GetAllVideosAsync();
         public Task<Videos> GetVideosByVideoName(string videoName);
         public Task<int> InsertVideosAsync(params Videos[] items);
-        public Task<int> UpdateVideosAsync(params Videos[] items);
+        public Task<int> UpdateVideosAsync(ISQLiteAsyncConnection connection, params Videos[] items);
 
         public Task UpdateBytesOffLoadedOfVideo(int id, long bytesOffloaded);
         public Task UpdateTotalBytesOfVideo(int id, long totalBytes);
 
-        public Task UpdateStateOfVideos(VideoStates state, params int[] ids);
+        public Task UpdateStateOfVideo(int id, VideoStates state);
         public Task<int> DeleteVideosAsync(params Videos[] items);
     }
 
@@ -50,9 +50,9 @@ namespace WatchMe.Persistance.Sqlite
             return count;
         }
 
-        public async Task<int> UpdateVideosAsync(params Videos[] items)
+        public async Task<int> UpdateVideosAsync(ISQLiteAsyncConnection connection, params Videos[] items)
         {
-            var database = GetConnection();
+            var database = connection ?? GetConnection();
             var count = 0;
             foreach (var item in items)
             {
@@ -84,7 +84,7 @@ namespace WatchMe.Persistance.Sqlite
             var database = GetConnection();
             var record = await database.Table<Videos>().Where(x => x.Id == id).FirstOrDefaultAsync();
             record.BytesOffloaded = bytesOffloaded;
-            await UpdateVideosAsync(record);
+            await UpdateVideosAsync(database, record);
             await database.CloseAsync();
         }
 
@@ -93,27 +93,17 @@ namespace WatchMe.Persistance.Sqlite
             var database = GetConnection();
             var record = await database.Table<Videos>().Where(x => x.Id == id).FirstOrDefaultAsync();
             record.TotalBytes = totalBytes;
-            await UpdateVideosAsync(record);
+            await UpdateVideosAsync(database, record);
             await database.CloseAsync();
         }
 
-        public async Task UpdateStateOfVideos(VideoStates state, params int[] ids)
+        public async Task UpdateStateOfVideo(int id, VideoStates state)
         {
             var database = GetConnection();
-
-            var records = await GetVideosByIds(database, ids);
-            foreach (var record in records)
-            {
-                record.VideoState = state.ToString();
-            }
-            await UpdateVideosAsync(records.ToArray());
+            var record = await database.Table<Videos>().Where(x => x.Id == id).FirstOrDefaultAsync();
+            record.VideoState = state.ToString();
+            await UpdateVideosAsync(database, record);
             await database.CloseAsync();
-        }
-
-        private async Task<List<Videos>> GetVideosByIds(ISQLiteAsyncConnection database, int[] ids)
-        {
-            var results = await database.Table<Videos>().Where(x => ids.Contains(x.Id)).ToListAsync();
-            return results;
         }
     }
 }

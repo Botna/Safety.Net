@@ -15,6 +15,13 @@
                     Grid.Row="1"
                     WidthRequest="300"
                     HeightRequest="300"/>
+
+                <Button
+                    Text="Start Recording"
+                    Clicked="StartStopRecording"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="End"/>
+                
             </VerticalStackLayout>
         </ScrollView>
     </Grid>

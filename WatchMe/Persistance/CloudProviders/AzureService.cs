@@ -29,7 +29,7 @@ namespace WatchMe.Persistance.CloudProviders
                 BlobClient blobClient = containerClient.GetBlobClient(contentName);
                 var result = await blobClient.UploadAsync(fileStream, true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ToastHelper.CreateToast("Issue uploading to SC");
             }
@@ -37,10 +37,10 @@ namespace WatchMe.Persistance.CloudProviders
 
         public async Task AppendContentToCloud(byte[] bytes, string contentName)
         {
-            string storageContainerConnectionString = await SecureStorage.Default.GetAsync(AZURESTORAGECONTAINERCONNECTIONSTRINGKEY);
-
             try
             {
+                string storageContainerConnectionString = await GetAzureConnectionString();
+
                 var containerClient = new BlobContainerClient(storageContainerConnectionString, "watchme");
                 await containerClient.CreateIfNotExistsAsync();
 
@@ -62,9 +62,9 @@ namespace WatchMe.Persistance.CloudProviders
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ToastHelper.CreateToast("issue uploaded to AppendBlob");
+                await ToastHelper.CreateToast("issue uploading to AppendBlob");
             }
         }
 

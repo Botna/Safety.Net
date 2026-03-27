@@ -6,27 +6,23 @@ namespace WatchMe.Persistance.Implementations
 {
     public class AndroidFileSystemService : BaseFileSystemService
     {
-        public AndroidFileSystemService() { }
+        //Todo, do in an agnostic way that isnt just working on android.
 
-        public override async Task<byte[]> MoveVideoToGallery(string fileName)
+        public AndroidFileSystemService() { }
+        public override async Task MoveVideoToGallery(MemoryStream memStream, string fileName)
         {
-            var bytes = await GetAllFileBytesFromCacheDirectory(fileName);
-            if (bytes?.Length == 0)
-            {
-                return bytes;
-            }
-            //use FFMPeg to convert the bytes[] into a proper mp4 video, then save the bytes as an mp4, so my phoen can play it!
+
             var context = Platform.CurrentActivity;
             var resolver = context.ContentResolver;
             var contentValues = new ContentValues();
             contentValues.Put(MediaStore.IMediaColumns.DisplayName, fileName);
-            contentValues.Put(MediaStore.Files.IFileColumns.MimeType, "video/mp2t");
+            contentValues.Put(MediaStore.Files.IFileColumns.MimeType, "video/mp4");
             contentValues.Put(MediaStore.IMediaColumns.RelativePath, "DCIM/WatchMeVideoCaptures");
             try
             {
                 var videoUri = resolver.Insert(MediaStore.Video.Media.ExternalContentUri, contentValues);
                 var output = resolver.OpenOutputStream(videoUri);
-                output.Write(bytes, 0, bytes.Length);
+                output.Write(memStream.ToArray());
                 output.Flush();
                 output.Close();
                 output.Dispose();
@@ -34,12 +30,9 @@ namespace WatchMe.Persistance.Implementations
             catch (Exception ex)
             {
                 Console.Write(ex.ToString());
-                return Array.Empty<byte>();
+
             }
-            return bytes;
         }
-
-
     }
 }
 #endif
