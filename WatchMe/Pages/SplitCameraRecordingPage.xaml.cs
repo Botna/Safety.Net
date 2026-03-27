@@ -20,7 +20,7 @@ public partial class SplitCameraRecordingPage : ContentPage
     {
         try
         {
-            _orchestrationService.Initialize(null, BackCameraView);
+            await _orchestrationService.Initialize(BackCameraView);
         }
         catch (Exception ex)
         {

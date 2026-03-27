@@ -9,7 +9,7 @@ namespace WatchMe.Services
 {
     public interface IOrchestrationService
     {
-        Task Initialize(CameraView frontCameraView, CameraView backCameraView);
+        Task Initialize(CameraView backCameraView);
         Task InitiateRecordingProcedure();
         Task StopRecordingProcedure();
     }
@@ -20,14 +20,11 @@ namespace WatchMe.Services
         private readonly IFileSystemService _fileSystemService;
         private readonly INotificationService _notificationService;
         private readonly IVideosRepository _videosRepository;
-        //private readonly ICameraWrapper _cameraWrapper;
         private readonly IForegroundServiceDispatcher _serviceDispatcher;
 
         private string _videoTimeStamp;
-        private string _frontVideoFileName;
-        private string _backVideoFileName;
 
-        private CameraView _frontCameraView;
+        private string _backVideoFileName;
         private CameraView _backCameraView;
 
         public OrchestrationService(ICloudProviderService cloudProviderService, IFileSystemService fileSystemService, INotificationService notificationService, IDatabaseInitializer databaseInitializer,
@@ -42,11 +39,10 @@ namespace WatchMe.Services
             databaseInitializer.Init();
         }
 
-        public async Task Initialize(CameraView front, CameraView back)
+        public async Task Initialize(CameraView back)
         {
             _videoTimeStamp = DateTime.UtcNow.ToString("yyyyMMddHHmmssffff");
             _backVideoFileName = $"Back_{_videoTimeStamp}.mp4";
-            _frontCameraView = front;
             _backCameraView = back;
 
 
@@ -133,6 +129,8 @@ namespace WatchMe.Services
         public async Task StopRecordingProcedure()
         {
             var backMemStream = await _backCameraView.StopVideoRecording(CancellationToken.None);
+
+            if (backMemStream == Stream.Null) return;
 
             if (backMemStream != Stream.Null)
             {
