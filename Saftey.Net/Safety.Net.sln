@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.3.11505.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchMe", "WatchMe.csproj", "{1A89E79F-D4D8-4762-B326-E6CA96BAD968}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Safety.Net", "Safety.Net.csproj", "{1A89E79F-D4D8-4762-B326-E6CA96BAD968}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchMe.UnitTests", "..\WatchMe.UnitTests\WatchMe.UnitTests.csproj", "{B6AED31B-5DE9-4183-85C2-2505C830226D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Safety.Net.UnitTests", "..\Safety.Net.UnitTests\Safety.Net.UnitTests.csproj", "{B6AED31B-5DE9-4183-85C2-2505C830226D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchMe.UITests.Android", "..\WatchMe.UITests.Android\WatchMe.UITests.Android.csproj", "{A95EE64D-5395-41D8-9D1A-B78ED73F8EFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Safety.Net.UITests.Android", "..\Safety.Net.UITests.Android\Safety.Net.UITests.Android.csproj", "{A95EE64D-5395-41D8-9D1A-B78ED73F8EFC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchMe.UITests.Shared", "..\WatchMe.UiTests.Shared\WatchMe.UITests.Shared.csproj", "{498A4D1E-F1D3-43CB-ABCA-BD6EA16DEDB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Safety.Net.UITests.Shared", "..\Safety.Net.UiTests.Shared\Safety.Net.UITests.Shared.csproj", "{498A4D1E-F1D3-43CB-ABCA-BD6EA16DEDB2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityToolkit.Maui.Camera", "..\..\Maui\src\CommunityToolkit.Maui.Camera\CommunityToolkit.Maui.Camera.csproj", "{853490A1-A7ED-6220-269F-986DD4F00827}"
 EndProject

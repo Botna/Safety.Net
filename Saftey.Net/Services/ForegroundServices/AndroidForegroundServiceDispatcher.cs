@@ -61,9 +61,6 @@ namespace WatchMe.Services.ForegroundServices
             return StartCommandResult.NotSticky;
         }
 
-
-
-
         //Start and Stop Intents, set the actions for the MainActivity to get the state of the foreground service
         //Setting one action to start and one action to stop the foreground service
         public void StartVUFS()
@@ -82,7 +79,7 @@ namespace WatchMe.Services.ForegroundServices
             manager.CreateNotificationChannel(channel);
             Notification notification = new Notification.Builder(this, "ServiceChannel")
                .SetContentTitle("Service Working")
-               .SetSmallIcon(Resource.Drawable.abc_btn_check_material)
+               .SetSmallIcon(CommunityToolkit.Maui.Resource.Drawable.abc_btn_check_material)
                .SetOngoing(true)
                .SetForegroundServiceBehavior((int)ForegroundService.TypeDataSync)
                .Build();
