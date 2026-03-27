@@ -69,8 +69,8 @@ namespace WatchMe.Services
                     File.Delete(mp4);
                 }
             }
-
-            _serviceDispatcher.StartVUFS();
+            //dont start it here yet till we have at max one instance fixed.
+            //_serviceDispatcher.StartVUFS();
         }
 
         public async Task InitiateRecordingProcedure()
@@ -110,6 +110,8 @@ namespace WatchMe.Services
                 VideoState = VideoStates.Recording.ToString(),
                 CreatedAt = DateTime.UtcNow
             });
+
+            _serviceDispatcher.StartVUFS();
         }
 
         private Size FindSmallestSize(List<Size> sizes)
