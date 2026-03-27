@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net9.0-android;net9.0</TargetFrameworks>
+		<TargetFrameworks>net10.0-android;net10.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 
@@ -12,7 +12,7 @@
 		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
 		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
-    <OutputType Condition="'$(TargetFramework)' != 'net9.0'">Exe</OutputType>
+    <OutputType Condition="'$(TargetFramework)' != 'net10.0'">Exe</OutputType>
     <RootNamespace>WatchMe</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
@@ -51,19 +51,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Azure.Identity" Version="1.13.1" />
+		<PackageReference Include="Azure.Identity" Version="1.17.1" />
 		<PackageReference Include="Azure.Storage.Blobs" Version="12.23.0" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.1" />
-		<PackageReference Include="FFMpegCore" Version="5.4.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="14.0.0" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.41" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.120" />
-		<PackageReference Include="Plugin.Maui.ScreenRecording" Version="1.0.0-preview2" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\WatchMe.Camera\WatchMe.Camera.csproj" />
+	  <ProjectReference Include="..\..\Maui\src\CommunityToolkit.Maui.Camera\CommunityToolkit.Maui.Camera.csproj" />
 	</ItemGroup>
 
   <ItemGroup>

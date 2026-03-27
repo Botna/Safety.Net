@@ -1,6 +1,3 @@
-using Plugin.Maui.ScreenRecording;
-using System.Collections.Concurrent;
-using WatchMe.Camera;
 using WatchMe.Services;
 
 
@@ -8,72 +5,50 @@ namespace WatchMe;
 
 public partial class SplitCameraRecordingPage : ContentPage
 {
-    private readonly string _videoTimeStampSuffix;
-    private readonly IScreenRecording _screenRecorder;
-    private readonly ConcurrentBag<string> camerasLoaded = new ConcurrentBag<string>();
     private readonly IOrchestrationService _orchestrationService;
 
     public SplitCameraRecordingPage(IOrchestrationService orchestrationService)
     {
         InitializeComponent();
-        cameraViewBack.CamerasLoaded += CameraViewBack_CamerasLoaded;
-        cameraViewFront.CamerasLoaded += CameraViewFront_CamerasLoaded;
-        //_videoTimeStampSuffix = DateTime.UtcNow.ToString("yyyyMMddHHmmssffff");
 
         _orchestrationService = orchestrationService;
-        _orchestrationService.Initialize(cameraViewFront, cameraViewBack);
+        Loaded += OnPageLoaded;
     }
 
-    public void CameraViewBack_CamerasLoaded(object sender, EventArgs e)
-    {
-        camerasLoaded.Add("front");
 
-        MainThread.BeginInvokeOnMainThread(async () =>
-        {
-            await StartRecordingWhenBothCamerasLoaded();
-        });
-    }
-
-    public void CameraViewFront_CamerasLoaded(object sender, EventArgs e)
+    private async void OnPageLoaded(object? sender, EventArgs e)
     {
-        camerasLoaded.Add("back");
-        MainThread.BeginInvokeOnMainThread(async () =>
+        try
         {
-            await StartRecordingWhenBothCamerasLoaded();
-        });
-    }
-
-    private async Task StartRecordingWhenBothCamerasLoaded()
-    {
-        if (camerasLoaded.Count() == 1)
+            await _orchestrationService.Initialize(BackCameraView);
+        }
+        catch (Exception ex)
         {
+            await DisplayAlertAsync("Permission Denied", ex.Message, "OK");
             return;
         }
 
-        var frontCamera = cameraViewFront.Cameras.FirstOrDefault(x => x.Position == CameraPosition.Front);
-        var backCamera = cameraViewBack.Cameras.FirstOrDefault(x => x.Position == CameraPosition.Back);
+        Loaded -= OnPageLoaded;
+    }
 
-        cameraViewFront.Camera = frontCamera;
-        cameraViewBack.Camera = backCamera;
 
-        await _orchestrationService.InitiateRecordingProcedure();
+    private async void StartStopRecording(object sender, EventArgs e)
+    {
+        var currentState = ((Button)sender).Text;
+        if (currentState.Equals("Start Recording"))
+        {
+            await _orchestrationService.InitiateRecordingProcedure();
+            ((Button)sender).Text = "Stop Recording";
+        }
+        else
+        {
+            await _orchestrationService.StopRecordingProcedure();
+            ((Button)sender).Text = "Start Recording";
+        }
     }
 
     protected override async void OnNavigatingFrom(NavigatingFromEventArgs e)
     {
         await _orchestrationService.StopRecordingProcedure();
-
-
-
-        //var frontFileName = $"Front_{_videoTimeStampSuffix}.mp4";
-        //var backFileName = $"Back_{_videoTimeStampSuffix}.mp4";
-
-        //var result = await cameraViewFront.StopCameraAsync();
-        ////result = await cameraViewBack.StopCameraAsync();
-
-        //var frontFileTask = _orchestrationService.ProcessSavedVideoFile(frontFileName, FileSystem.Current.CacheDirectory);
-        ////var backFileTask = _orchestrationService.ProcessSavedVideoFile(backFileName, FileSystem.Current.CacheDirectory);
-
-        //await Task.WhenAll(/*backFileTask,*/ frontFileTask);
     }
 }

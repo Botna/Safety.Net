@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-using Plugin.Maui.ScreenRecording;
-using WatchMe.Camera;
+
 using WatchMe.Extensions;
 using WatchMe.Pages;
 using WatchMe.Persistance.CloudProviders;
@@ -19,8 +18,7 @@ namespace WatchMe
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
-                .UseMauiCameraView()
-                .UseScreenRecording()
+                .UseMauiCommunityToolkitCamera()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -36,8 +34,6 @@ namespace WatchMe
             builder.Services.AddTransient<IVideosRepository, VideosRepository>();
             builder.Services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
             builder.Services.AddTransient<IVideoChunksRepository, VideoChunksRepository>();
-            builder.Services.AddTransient<ICameraWrapper, CameraWrapper>();
-
 
             builder.Services.AddTransient<IOrchestrationService, OrchestrationService>();
             builder.Services.AddTransient<ICloudProviderService, AzureService>();
