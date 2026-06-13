@@ -7,7 +7,6 @@
         //Task<byte[]?> GetAllFileBytesFromCacheDirectory(string fileName);
         //string BuildCacheFileDirectory(string fileName);
         byte[]? GetFileBytesFromCacheDirectory(string fileName, long byteOffset);
-        byte[]? GetInitialBytesFromFile(string fileName);
 
     }
 }

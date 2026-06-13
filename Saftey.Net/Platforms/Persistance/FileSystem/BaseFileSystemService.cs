@@ -4,7 +4,10 @@ namespace WatchMe.Persistance.Implementations
 {
     public abstract class BaseFileSystemService : IFileSystemService
     {
-        private const long HEADER_BYTES_SIZE = 16384;
+        //public FileStream GetFileStreamOfFile(string fileName)
+        //{
+        //    return new FileStream(BuildCacheFileDirectory(fileName), FileMode.Open);
+        //}
 
         public abstract Task MoveVideoToGallery(MemoryStream memStream, string fileName);
 
@@ -24,27 +27,6 @@ namespace WatchMe.Persistance.Implementations
                     {
                         ms.Write(buffer, 0, bytesRead);
                     }
-                    return ms.ToArray();
-                }
-            }
-        }
-
-        public byte[]? GetInitialBytesFromFile(string fileName)
-        {
-            var filePath = BuildCacheFileDirectory(fileName);
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-            {
-                var currentMax = fileStream.Length;
-                byte[] buffer = new byte[HEADER_BYTES_SIZE];
-
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    int bytesRead;
-                    fileStream.Seek(0, SeekOrigin.Current);
-
-                    bytesRead = fileStream.Read(buffer, 0, buffer.Length);
-                    ms.Write(buffer, 0, bytesRead);
-
                     return ms.ToArray();
                 }
             }

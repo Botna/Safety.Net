@@ -1,9 +1,8 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-
+using Safety.Net.Persistance.CloudProviders;
 using WatchMe.Extensions;
 using WatchMe.Pages;
-using WatchMe.Persistance.CloudProviders;
 using WatchMe.Persistance.Sqlite;
 using WatchMe.Services;
 
@@ -36,7 +35,8 @@ namespace WatchMe
             builder.Services.AddTransient<IVideoChunksRepository, VideoChunksRepository>();
 
             builder.Services.AddTransient<IOrchestrationService, OrchestrationService>();
-            builder.Services.AddTransient<ICloudProviderService, AzureService>();
+            builder.Services.AddSingleton<ICloudProviderService, AzureService>();
+            builder.Services.AddSingleton<GoogleDriveService>();
             builder.Services.AddTransient<INotificationService, NotificationService>();
 
             builder.Services.AddSingleton<VideoUploadForegroundService>();

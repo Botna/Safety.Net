@@ -1,7 +1,7 @@
-﻿using WatchMe.Config;
+﻿using Safety.Net.Persistance.CloudProviders;
+using WatchMe.Config;
 using WatchMe.Helpers;
 using WatchMe.Pages;
-using WatchMe.Persistance.CloudProviders;
 
 
 #if ANDROID

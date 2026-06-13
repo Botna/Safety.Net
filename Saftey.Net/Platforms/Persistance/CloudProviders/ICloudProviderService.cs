@@ -1,4 +1,4 @@
-﻿namespace Safety.Net.Persistance.CloudProviders
+﻿namespace WatchMe.Persistance.CloudProviders
 {
     public interface ICloudProviderService
     {

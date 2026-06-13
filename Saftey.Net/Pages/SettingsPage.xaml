@@ -19,6 +19,20 @@
             Placeholder="WatchMe started notification phone number..."
             TextChanged="OnNotifyPhoneNumberChanged"
             Keyboard="Telephone"/>
+
+        <Button
+                x:Name="SignInButton"
+                Text="Sign In" 
+                Clicked="SignIn_Clicked"
+                HorizontalOptions="Fill" />
+        <Button
+                x:Name="ListButton"
+                Text="List"
+                Clicked="List_Clicked"
+                HorizontalOptions="Fill"
+                IsVisible="False" />
+        <Label x:Name="ListLabel" />
+        
         <Button
             Text="Save" 
             AutomationId="Settings_SaveButton"
