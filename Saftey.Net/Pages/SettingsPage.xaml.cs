@@ -8,21 +8,16 @@ namespace WatchMe.Pages;
 public partial class SettingsPage : ContentPage
 {
     public readonly GoogleDriveService _googleDriveService;
-    public readonly ICloudProviderService _cloudProviderService;
     public readonly IPreferences _preferences;
-    private string ASCConnectionString = string.Empty;
-    private bool ASCConnStringChanged = false;
-
 
     private string PhoneNumber = string.Empty;
     private bool PhoneNumberChanged = false;
 
     private string PhoneNumberRegex = @"^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$";
 
-    public SettingsPage(ICloudProviderService cloudProviderService, GoogleDriveService googleDriveService)
+    public SettingsPage(GoogleDriveService googleDriveService)
     {
         InitializeComponent();
-        _cloudProviderService = cloudProviderService;
         _preferences = Preferences.Default;
         _googleDriveService = googleDriveService;
     }
@@ -38,13 +33,10 @@ public partial class SettingsPage : ContentPage
         if (_googleDriveService.IsSignedIn)
         {
             SignInButton.Text = $"Sign Out ({_googleDriveService.Email})";
-            ListButton.IsVisible = true;
         }
         else
         {
             SignInButton.Text = "Sign In";
-            ListButton.IsVisible = false;
-            ListLabel.Text = String.Empty;
         }
     }
 
@@ -62,13 +54,6 @@ public partial class SettingsPage : ContentPage
         UpdateButton();
     }
 
-
-    private async void OnAzureSCConnChanged(object sender, TextChangedEventArgs e)
-    {
-        ASCConnectionString = e.NewTextValue;
-        ASCConnStringChanged = true;
-    }
-
     private async void OnNotifyPhoneNumberChanged(object sender, TextChangedEventArgs e)
     {
         PhoneNumber = e.NewTextValue;
@@ -77,10 +62,6 @@ public partial class SettingsPage : ContentPage
 
     private async void OnSettingsPageSave(object sender, EventArgs e)
     {
-        if (ASCConnStringChanged)
-        {
-            await _cloudProviderService.SetAzureConnectionString(ASCConnectionString);
-        }
         if (PhoneNumberChanged)
         {
             PermissionStatus status = await Permissions.CheckStatusAsync<Permissions.Sms>();
