@@ -35,7 +35,6 @@ namespace WatchMe
             builder.Services.AddTransient<IVideoChunksRepository, VideoChunksRepository>();
 
             builder.Services.AddTransient<IOrchestrationService, OrchestrationService>();
-            builder.Services.AddSingleton<ICloudProviderService, AzureService>();
             builder.Services.AddSingleton<GoogleDriveService>();
             builder.Services.AddTransient<INotificationService, NotificationService>();
 

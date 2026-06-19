@@ -5,12 +5,9 @@
 
 ## Recombining Google drive files
 
-in order to upload things succesfully to google drive, we upload your currently recording video files in chunk format.  To recombine open cmd and do the following
+in order to upload things succesfully to google drive, we upload your currently recording video files in chunk format, recombine, then `close` the file by overlaying a small header section onto the recombined file
 
-```
-> copy /b vid.mp4_0 + vid.mp4_1 + vid.mp4_2 vid.mp4
-```
+### Requires powershell 7
 
-This will build you a video file named `vid.mp4` that has everythign it needs, minus some metadata at the beginning of the file.
-
-the file appende _headerData needs to replace the initial 16kb of the combined file you made above.  After that, the video is capable of being played.
+- Execute included consolidateDriveFiles.ps1
+- when prompted for a directory, specify the unzipped google drive folder directory.

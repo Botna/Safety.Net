@@ -10,17 +10,13 @@ namespace WatchMe.Services
     {
         private readonly IFileSystemService _fileSystemService;
         private readonly IVideosRepository _videosRepository;
-        private readonly ICloudProviderService _cloudProviderService;
         private readonly GoogleDriveService _googleDriveService;
 
-        public VideoUploadForegroundService(IFileSystemService? fileSystemService, IVideosRepository? videosRepository, ICloudProviderService? cloudProviderService, GoogleDriveService googleDriveService)
+        public VideoUploadForegroundService(IFileSystemService? fileSystemService, IVideosRepository? videosRepository, GoogleDriveService googleDriveService)
         {
-            _cloudProviderService = cloudProviderService ?? throw new ArgumentNullException(nameof(cloudProviderService));
             _fileSystemService = fileSystemService ?? throw new ArgumentNullException(nameof(fileSystemService));
             _videosRepository = videosRepository ?? throw new ArgumentNullException(nameof(videosRepository));
             _googleDriveService = googleDriveService ?? throw new ArgumentNullException(nameof(GoogleDriveService));
-
-
         }
         public async Task DoWorkAsync()
         {
@@ -38,8 +34,6 @@ namespace WatchMe.Services
                     if (file.TotalBytes != 0 && file.TotalBytes == file.BytesOffloaded)
                     {
                         //Video is finished recording, and we've uploaded all the bytes.
-
-                        //need to handle cleanup here, or possibly after the while loop.
 
                         bytes = _fileSystemService.GetInitialBytesFromFile(file.VideoName);
                         var headerFileName = file.VideoName + "_headerPart";

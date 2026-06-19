@@ -239,9 +239,12 @@ namespace Safety.Net.Persistance.CloudProviders
         {
             var folderId = await GetFolderId();
 
+
+
+            var updatedFilename = FormatFileName(filename);
             var fileMetadata = new Google.Apis.Drive.v3.Data.File()
             {
-                Name = $"{filename}_{counter}",
+                Name = updatedFilename,
                 // Optional: Specify a parent folder ID
                 Parents = new List<string> { folderId }
             };
@@ -255,6 +258,15 @@ namespace Safety.Net.Persistance.CloudProviders
                 await request.UploadAsync();
             }
             counter++;
+        }
+
+        private string FormatFileName(string filename)
+        {
+            //presently, we do mp4's and chunk them to be consolidated.  File extensions dont make sense here.
+            var updatedFilename = filename.Replace(".mp4", "");
+            updatedFilename = updatedFilename.Contains("header", StringComparison.InvariantCultureIgnoreCase) ? updatedFilename : $"{updatedFilename}_{counter}";
+
+            return updatedFilename;
         }
 
         private async Task<string> GetFolderId()

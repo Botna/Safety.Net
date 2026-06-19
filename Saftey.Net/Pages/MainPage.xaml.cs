@@ -11,6 +11,7 @@ namespace WatchMe
         {
             InitializeComponent();
             _recordingPage = recordingPage;
+            _settingsPage = settingsPage;
         }
 
         private async void OnRecordingPageNav(object sender, EventArgs e)
