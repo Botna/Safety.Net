@@ -29,9 +29,23 @@ $validHeader = $files | Where-Object { $_ -like "*_headerPart.mp4" }
  Write-Host "Consolidating files into file with name $outputFilename"
 
 foreach($chunk in $mp4Chunks){
+    Write-Host "Writing chunk: $chunk"
     $bytesToAppend = [System.IO.File]::ReadAllBytes("$chunk");
 
     [System.IO.File]::AppendAllBytes( $outputFilename, $bytesToAppend)
+
+    #it sometimes goes too fast and file is in use.  Hacky fix,m cause idk how powershell works.
+    do {
+        Start-Sleep -Milliseconds 50
+        $fileLocked = $false
+        try {
+            # Test if the file is still in use by another process
+            $stream = [System.IO.File]::Open($outputFilename, [System.IO.FileMode]::Open, [System.IO.FileAccess]::ReadWrite, [System.IO.FileShare]::None)
+            $stream.Close()
+        } catch {
+            $fileLocked = $true
+        }
+    } while ($fileLocked)
 }
 
 Write-Host "Built new file succesfully"
