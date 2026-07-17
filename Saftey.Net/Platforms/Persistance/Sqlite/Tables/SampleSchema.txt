@@ -1,0 +1,21 @@
+﻿// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+// https://dbdiagram.io/d
+
+
+Table Videos {
+  VideoId integer [primary key]
+  VideoName varchar
+  VideoState varchar
+  TotalBytes integer
+  CreatedAt timestamp
+}
+Table VideoChunk{
+  VideoChunkId integer [primary key]
+  VideoId integer
+  VideoChunkNumber integer
+  StartByte integer
+  EndByte integer
+}
+
+Ref: VideoChunk.VideoId > Videos.VideoId

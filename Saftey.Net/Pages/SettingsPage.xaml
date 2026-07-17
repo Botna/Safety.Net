@@ -9,16 +9,18 @@
     VerticalOptions="Fill"
     HorizontalOptions="Fill" >
         <Label Text="Settings" />
-        <Entry x:Name="azure_storage_container_connstr"
-            AutomationId="Settings_AzureSCConnstry_Entry"
-            Placeholder="Azure Storage Container Connection string..."
-            TextChanged="OnAzureSCConnChanged"
-            IsPassword="True"/>
         <Entry x:Name="event_started_notification_phone_number"
             AutomationId="Settings_WatchStarted_PhoneNumber"
             Placeholder="WatchMe started notification phone number..."
             TextChanged="OnNotifyPhoneNumberChanged"
             Keyboard="Telephone"/>
+
+        <Button
+                x:Name="SignInButton"
+                Text="Sign In" 
+                Clicked="SignIn_Clicked"
+                HorizontalOptions="Fill" />
+
         <Button
             Text="Save" 
             AutomationId="Settings_SaveButton"

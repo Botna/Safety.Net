@@ -14,8 +14,6 @@ namespace WatchMe.Persistance.Sqlite
         public Task UpdateTotalBytesOfVideo(int id, long totalBytes);
 
         public Task UpdateStateOfVideo(int id, VideoStates state);
-
-        public Task DeleteVideosById(int id);
         public Task<int> DeleteVideosAsync(params Videos[] items);
     }
 
@@ -28,6 +26,8 @@ namespace WatchMe.Persistance.Sqlite
             await database.CloseAsync();
             return results;
         }
+
+
 
         public async Task<Videos> GetVideosByVideoName(string videoName)
         {
@@ -74,14 +74,6 @@ namespace WatchMe.Persistance.Sqlite
             }
             await database.CloseAsync();
             return count;
-        }
-
-        public async Task DeleteVideosById(int id)
-        {
-            var database = GetConnection();
-            var record = await database.Table<Videos>().Where(x => x.Id == id).FirstOrDefaultAsync();
-            await database.DeleteAsync(record);
-            await database.CloseAsync();
         }
 
         public virtual ISQLiteAsyncConnection GetConnection() =>
