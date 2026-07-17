@@ -21,10 +21,10 @@ namespace WatchMe.Services
         public async Task DoWorkAsync()
         {
             await _googleDriveService.Init();
+            WaitForInitialTick();
             var SENTINEL = true;
             while (SENTINEL)
             {
-                WaitForNextTick();
                 SENTINEL = false;
                 var files = await _videosRepository.GetAllVideosAsync();
                 //Spin, pull bytes of currently recording videos, and start uploading htem in ~5 second increments. 
@@ -54,9 +54,10 @@ namespace WatchMe.Services
             }
         }
 
-        public virtual void WaitForNextTick()
+        public virtual void WaitForInitialTick()
         {
-            var secondsToSleep = 5;
+            //There just wont be any data to upload initially, so we have a one time sleep at the top
+            var secondsToSleep = 3;
             Thread.Sleep(secondsToSleep * 1000);
         }
 
